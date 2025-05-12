@@ -17,7 +17,7 @@ app = FastAPI(
 # Configure CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3001"],  # Allow frontend origin
+    allow_origins=["http://localhost:3001", "https://teacherly-ai.vercel.app"],  # Allow local dev and deployed frontend
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

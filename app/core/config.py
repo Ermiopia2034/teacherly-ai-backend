@@ -18,6 +18,10 @@ class Settings(BaseSettings):
     JWT_SECRET_KEY: str # Renamed from JWT_SECRET based on error
     ALGORITHM: str = "HS256" # Renamed from JWT_ALGORITHM based on error
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
+    PASSWORD_RESET_TOKEN_EXPIRE_MINUTES: int = 30 # Expiry for password reset tokens
+    
+    # Frontend URL (for password reset links, etc.)
+    FRONTEND_URL: str = "http://localhost:3001"
     
     # Google Gemini API
     GEMINI_API_KEY: Optional[str] = None

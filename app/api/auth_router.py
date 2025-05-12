@@ -81,3 +81,32 @@ async def read_users_me(
     Get current logged-in user.
     """
     return current_user
+# --- Forgot/Reset Password Endpoints ---
+
+@router.post("/forgot-password")
+async def request_password_reset(
+    request: user_schema.ForgotPasswordRequest,
+    db: AsyncSession = Depends(deps.get_db)
+):
+    """
+    Request a password reset link to be sent via email.
+    """
+    # The service handles finding the user and sending the email (or not)
+    # It returns a generic message to prevent user enumeration
+    result = await auth_service.handle_forgot_password(db=db, email=request.email)
+    return result # e.g., {"message": "If an account exists..."}
+
+@router.post("/reset-password")
+async def reset_password(
+    request: user_schema.ResetPasswordRequest,
+    db: AsyncSession = Depends(deps.get_db)
+):
+    """
+    Reset the user's password using a valid token.
+    """
+    # The service handles token verification and password update
+    # It raises HTTPException on errors (invalid token, user not found, etc.)
+    result = await auth_service.handle_reset_password(
+        db=db, token=request.token, new_password=request.new_password
+    )
+    return result # e.g., {"message": "Password has been successfully reset."}
