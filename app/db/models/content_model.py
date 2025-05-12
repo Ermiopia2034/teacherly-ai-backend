@@ -1,7 +1,7 @@
 import enum
 from sqlalchemy import Column, Integer, String, Text, ForeignKey, DateTime, func, JSON, Enum as SAEnum
 from sqlalchemy.orm import relationship
-from ..models import Base # Corrected import
+from app.db.database import Base # Import Base from the central database module
 
 class ContentType(enum.Enum):
     MATERIAL = "material" # Teaching material, lesson plan, worksheet

@@ -1,8 +1,7 @@
 import enum
 from sqlalchemy import Column, Integer, String, Boolean, DateTime, func, Enum as SAEnum
 from sqlalchemy.orm import relationship
-from ..models import Base # Corrected import from the same package level
-
+from app.db.database import Base # Corrected import from the new database.py
 class UserRole(enum.Enum):
     TEACHER = "teacher"
     ADMIN = "admin" # For future use

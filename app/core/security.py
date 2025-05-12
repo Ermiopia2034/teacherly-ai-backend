@@ -1,9 +1,10 @@
 from datetime import datetime, timedelta
 from typing import Any, Optional, Union
 
-from jose import jwt
+from jose import jwt, JWTError
 from passlib.context import CryptContext
 from app.core.config import settings
+from app.schemas.token_schema import TokenData
 
 # Password hashing context
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -35,4 +36,33 @@ def create_access_token(subject: Union[str, Any], expires_delta: Optional[timede
         )
     
     to_encode = {"exp": expire, "sub": str(subject)}
-    return jwt.encode(to_encode, settings.JWT_SECRET, algorithm=settings.JWT_ALGORITHM) 
+    return jwt.encode(to_encode, settings.JWT_SECRET_KEY, algorithm=settings.ALGORITHM)
+
+def decode_access_token(token: str) -> Optional[TokenData]:
+    """
+    Decode JWT access token.
+    
+    Args:
+        token: The JWT token string.
+        
+    Returns:
+        TokenData if token is valid, None otherwise.
+    """
+    try:
+        payload = jwt.decode(
+            token, settings.JWT_SECRET_KEY, algorithms=[settings.ALGORITHM]
+        )
+        # The 'sub' claim is expected to be the user_id as a string
+        subject: Optional[str] = payload.get("sub")
+        
+        if subject is None:
+            return None # No subject claim found
+        
+        try:
+            user_id = int(subject)
+        except ValueError:
+            return None # Subject is not a valid integer for user_id
+            
+        return TokenData(user_id=user_id)
+    except JWTError: # Catches various JWT errors like ExpiredSignatureError, InvalidTokenError
+        return None

@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, Float, Text, ForeignKey, DateTime, func
 from sqlalchemy.orm import relationship
-from ..models import Base # Corrected import
+from app.db.database import Base # Import Base from the central database module
 
 class Grade(Base):
     __tablename__ = "grades"

@@ -1,9 +1,6 @@
-from sqlalchemy.orm import declarative_base
+# Import all models here so Alembic can find them, and ensure Base is imported consistently
+# from ..database import Base # This line might be needed elsewhere if __init__ itself needs Base
 
-# Base class for all SQLAlchemy models
-Base = declarative_base()
-
-# Import all models here so Alembic can find them
 from .user_model import User
 from .student_model import Student
 from .content_model import Content
